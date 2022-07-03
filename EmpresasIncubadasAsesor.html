@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
+    <script src="https://kit.fontawesome.com/938364cfa6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <title>Empresas incubadas</title>
+</head>
+
+<body ng-app="simen" ng-controller="controllerapp">
+    <header>
+        <a href="#" class="menu-bars" id="show-menu">
+            <i class="fa fa-bars"></i>
+        </a>
+        <img class="rounded-circle img-fluid" alt="Logo" src="src/logoIncubadora.png" data-holder-rendered="true" style="width:6rem; height:6rem">
+        <label class="titulo"><strong>
+                <h3>SISTEMA DE INCUBACION DE EMPRESAS</h3>
+            </strong></label>
+        <label for="" style="margin-left: 10%;">Sesión de
+                <strong>
+                    {{usuario}}
+                    <span ng-if="rol == 1">
+                        (Administrador)
+                    </span>
+                    <span ng-if="rol == 2">
+                        (Asesor)
+                    </span>
+                    <span ng-if="rol == 3">
+                        (Usuario)
+                    </span>
+                </strong>
+            </label>
+
+    </header>
+
+    <nav id="nav-menu">
+        <ul class="nav-menu-items">
+            <div id="navbar-toggle">
+                <a href="#" class="menu-bars" id="hide-menu">
+                    <i class="fas fa-bars nav-icon"></i>
+                </a>
+                <a href="#">
+                    <h1>
+                        <i class="fas fa-user-tie"></i> SIMEN
+                    </h1>
+                </a>
+            </div>
+            <hr>
+            <div class="nav-section">
+                <li class="nav-text"><a href="contrasenas.html"><i class="fas fa-angle-right"></i> Cambiar
+                        contraseña</a></li>
+
+                <li class="nav-text"><a href="EmpresasIncubadasAsesor.html"><i class="fas fa-angle-right"></i>Empresas
+                        incubadas</a></li>
+
+                <li class="nav-text"><a href="historialAsesor.html"><i class="fas fa-angle-right"></i> Historial</a></li>
+
+                <li class="">
+                    <form action="" ng-click="cerrarSesion()">
+                        <button class="btn btn-secondary" type="submit" style="margin-left: 15%; margin-top: 15%;">Cerrar sesión</button>
+                    </form>
+                    </a>
+                </li>
+
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <div class="contenedorTabla row" style="margin-bottom:15%;">
+            <div class="card-header col-md-12"><strong>EMPRESAS ASIGNADAS PARA EL ASESOR ACTUAL <i
+                        class="fas fa-user-tie">
+                    </i></strong>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Empresa</th>
+                        <th scope="col">Fase</th>
+                        <th scope="col">Nombre del representante</th>
+                        <th scope="col">Cargar archivo</th>
+                        <th scope="col">Reuniones</th>
+                        <th scope="col">Plan de marketing</th>
+                        <th scope="col">Deshabilitar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in misIncubaciones">
+                        <th scope="row">
+                            {{$index+1}}
+                            <input id="id" type="hidden" ng-value="{{item.idIncubacion}}">
+                        </th>
+                        <td>{{item.empresa.razonSocial}}</td>
+                        <td>
+                            <a type="button" ng-click="verIncubadora(item)" class="btn btn-success"><i
+                                    class="fas fa-info"></i>
+                            </a>
+
+
+                        </td>
+                        <td>{{item.empresa.representante.nombre}}</td>
+                        <td>
+                            <span ng-if="item.status == 6">
+                                <button class="btn btn-dark" ng-click="cargarArchivo(item)">Subir Archivo</button>
+                                
+                            </span>
+                            <span ng-if="item.status <= 5">
+                                <label for=""> <strong>Acción aún no disponible</strong> </label>
+                            </span>
+                            <span ng-if="item.status == 7">
+                                <label for=""> <strong>Archivo Listo</strong> </label>
+                            </span>
+                        </td>
+
+                        <td>
+                            <a type="button" ng-click="verReunionesEmpresa(item)" class="btn btn-success"><i class="fas fa-user-friends"></i>
+                            </a>
+
+
+                        </td>
+                        <td>
+                            <span ng-if="item.status >= 3">
+                                <a type="button" ng-click="verPlanDeMarketing(item)" class="btn btn-warning"><i
+                                        class="fas fa-book"></i>
+                                </a>
+                            </span>
+                            <span ng-if="item.status == 1 || item.status == 2">
+                                <label for=""> <strong>Acción aún no disponible</strong> </label>
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-if="item.status >= 2">
+                                <a type="button" ng-click="reset(item)" class="btn btn-danger"><i class="fas fa-eraser"></i>
+                                </a>
+                            </span>
+                            <span ng-if="item.status <2">
+                                <label for=""> <strong>Acción aún no disponible</strong> </label>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:5%;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">REUNIONES</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form name="formReuniones" id="formReuniones" ng-submit="registroReuniones()">
+                            <div class="mb-3">
+                                <!--form-->
+                                <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                    <h3><strong>Nombre de la empresa</strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span class="input-group-text" id="addon-wrapping"> <i
+                                                class="fas fa-building"></i></span>
+                                        <input type="hidden" ng-model="reunionesEmp.incubacion.idIncubacion">
+                                        <input type="text" name="" id="" ng-model="reunionesEmp.incubacion.empresa.razonSocial" class="form-control" readonly="true" />
+                                    </div>
+                                </div>
+                                <label class="col-sm-12 col-form-label">
+                                    <h3><strong> Reuniones completadas </strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:left; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span ng-if="reunionesEmp.reunion1 > 0" class="animate-if">
+                                            <input type="checkbox" ng-model="reuniones.reunion1"
+                                                ng-checked="reunionesEmp.reunion1 > 0" disabled>
+                                        </span>
+                                        <span ng-if="reunionesEmp.reunion1 == 0" class="animate-if">
+                                            <input type="checkbox" ng-model="reuniones.reunion1" required>
+                                        </span>
+                                        <label for="" style="margin-left: 3%;">Reunion 1 </label>
+                                    </div>
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span ng-if="reunionesEmp.reunion1 == 0 || reunionesEmp.reunion2 > 0 " class="animate-if">
+                                            <input type="checkbox" ng-model="reuniones.reunion2"
+                                                ng-checked="reunionesEmp.reunion1 > 0" disabled>
+                                        </span>
+                                        <span ng-if="reunionesEmp.reunion1 > 0 && reunionesEmp.reunion2 == 0 " class="animate-if">
+                                            <input type="checkbox" ng-model="reuniones.reunion2" required>
+                                        </span>
+                                        <label for="" style="margin-left: 3%;">Reunion 2 </label>
+                                    </div>
+                                    <div class="input-group flex-nowrap col-md-6">
+
+                                        <span ng-if="reunionesEmp.reunion2 == 0 || reunionesEmp.reunion3 > 0 " class="animate-if">
+                                            <input type="checkbox" ng-model="reuniones.reunion3"
+                                                ng-checked="reunionesEmp.reunion3 > 0" disabled>
+                                        </span>
+                                        <span ng-if="reunionesEmp.reunion2 > 0 && reunionesEmp.reunion3 == 0 " class="animate-if">
+                                            <input type="checkbox" ng-model="reuniones.reunion3" required>
+                                        </span>
+                                        <label for="" style="margin-left: 3%;">Reunion 3 </label>
+                                    </div>
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span ng-if="reunionesEmp.reunion3 == 0 || reunionesEmp.reunion4 > 0 " class="animate-if">
+                                            <input type="checkbox" ng-model="reuniones.reunion4"
+                                                ng-checked="reunionesEmp.reunion4 > 0" disabled>
+                                        </span>
+                                        <span ng-if="reunionesEmp.reunion3 > 0 && reunionesEmp.reunion4 == 0" class="animate-if">
+                                            <input type="checkbox" ng-model="reuniones.reunion4" required>
+                                        </span>
+                                        <label for="" style="margin-left: 3%;">Reunion 4 </label>
+                                    </div>
+                                </div>
+                                <!--end form-->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-success" ng-disabled="reunionesEmp.reunion4 == 1 || formReuniones.$invalid"><i class="fas fa-check"></i>
+                                    Confirmar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal plan de marketing-->
+
+        <div class="modal fade" id="exampleModal22" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:5%;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">DETALLES DE LA EMPRESA</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form ng-submit="registroAsignarAsesor()">
+                            <div class="mb-3">
+                                <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                    <h3><strong>Nombre de la empresa</strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span class="input-group-text" id="addon-wrapping"> <i
+                                                class="fas fa-building"></i></span>
+                                        <input type="text" name="" id="" ng-model="incubacion.empresa.razonSocial" class="form-control" readonly="true" />
+                                    </div>
+                                </div>
+                                <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                    <h3><strong>Asesor</strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span class="input-group-text" id="addon-wrapping"> <i
+                                                class="fas fa-user-tie"></i></span>
+                                        <input type="text" name="" id="" placeholder="Sin asesor" ng-model="incubacion.asesor.nombre" class="form-control" readonly="true" />
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-12 col-form-label">
+                                    <h3><strong> Fase actual de la empresa </strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+
+                                        <div class="animate-switch-container" ng-switch on="incubacion.status" style="background-color: #050343; padding:1%; color: white;">
+                                            <div class="animate-switch" ng-switch-when="1">Empresa en registro.</div>
+                                            <div class="animate-switch" ng-switch-when="2">Asignando asesor.</div>
+                                            <div class="animate-switch" ng-switch-when="3">Reuniones cumpletadas.</div>
+                                            <div class="animate-switch" ng-switch-when="4">Plan marketing obtenido.
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="5">Empresa financiada.</div>
+                                            <div class="animate-switch" ng-switch-when="6">Registrada ante el SAT.</div>
+                                            <div class="animate-switch" ng-switch-when="7">Finalizada.</div>
+                                            <div class="animate-switch" ng-switch-default>Deshabilitada</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-12 col-form-label">
+                                    <h3><strong> Etapas de incubación </strong></h3>
+                                </label>
+
+                                <div class="form-group row" style="text-align:left; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+
+                                        <div class="animate-switch-container" ng-switch on="incubacion.status">
+                                            <div class="animate-switch" ng-switch-when="1">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="2">
+                                                <div>
+                                                    <label for=""> <strong>Reuniones realizadas: </strong></label>
+                                                    <label>
+                                                        <input type="checkbox" ng-checked="consulta.reunion1 > 0"
+                                                            class="radio" value="1" name="fooby[2][]" disabled />
+                                                        1</label>
+                                                    <label>
+                                                        <input type="checkbox" class="radio"
+                                                            ng-checked="consulta.reunion2 > 0" value="1"
+                                                            name="fooby[2][]" disabled /> 2</label>
+                                                    <label>
+                                                        <input type="checkbox" class="radio"
+                                                            ng-checked="consulta.reunion3 > 0" value="1"
+                                                            name="fooby[2][]" disabled /> 3</label>
+                                                    <label>
+                                                        <input type="checkbox" class="radio" value="1"
+                                                            ng-checked="consulta.reunion4 > 0" name="fooby[2][]"
+                                                            disabled /> 4</label>
+                                                </div>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="3">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="4">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="5">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="6">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i>
+                                                    Registrada ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="7">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i>
+                                                    Registrada ante el SAT </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green; "></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-default>No hay nada que mostrar.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="modal fade" id="exampleModalCarga" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:5%;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">REUNIONES</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <!--form-->
+                                <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                    <h3><strong>Nombre de la empresa</strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span class="input-group-text" id="addon-wrapping"> <i
+                                                class="fas fa-building"></i></span>
+                                        <input type="hidden" id="cargaid" value="{{carga.incubacion.idIncubacion}}">
+                                        <input type="text" name="" id="razon" ng-model="carga.incubacion.empresa.razonSocial" class="form-control" readonly="true" />
+                                    </div>
+                                </div>
+                                <label class="custom-file-upload">
+                                    <input id="fileUpload" type="file" name="fileUpload"
+                                        onchange="return cambiarFile();"> </label>
+
+                                <!--end form-->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-success" onclick="uploadFile()"><i class="fas fa-check"></i>
+                                    Confirmar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:5%;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Plan de marketing</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form ng-submit="registrarPlanDeMarketing()">
+                            <div class="mb-3">
+                                <!--form-->
+                                <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                    <h3><strong>Nombre de la empresa</strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span class="input-group-text" id="addon-wrapping"> <i
+                                                class="fas fa-building"></i></span>
+                                        <input type="hidden" ng-model="empresa.incubacion.idIncubacion">
+                                        <input type="text" name="" id="" ng-model="empresa.empresa.razonSocial" class="form-control" readonly="true" />
+                                    </div>
+                                </div>
+                                <label class="col-sm-12 col-form-label">
+                                    <h3><strong> Plan de marketing </strong></h3>
+                                </label>
+                                <div style="text-align:justify;">
+                                    <p><b>¿Cómo elaborar un plan de marketing?</b></p>
+
+                                    <p>En este documento, se especifican diferentes procesos o fases en los cuales basar la planificación: análisis de la situación, determinación de objetivos, elaboración y selección de estrategias, plan de acción, establecimiento de presupuesto y métodos de control.</p>
+
+                                    <p>Antes de su elaboración se debe analizar el mercado para poder plasmar en el plan de marketing todo lo aprendido. Se detallan los pasos a seguir en el proyecto por sus creadores y lo que se espera de dichas fases en términos de costes, posibles beneficios, tiempo empleado en el proyecto y los recursos que deberán emplearse en tal fin. Con la ayuda de la elaboración de este plan, se consigue una visión clara de lo que se quiere conseguir con este proyecto y el camino a seguir para ello. Es necesario por tanto conocer la situación actual de la empresa y las acciones que deberá emprender para lograr dichos objetivos.</p>
+
+                                    <p>Es una herramienta básica de gestión con la que deben contar empresas que pretendan ser competitivas. Mediante el estudio y la recopilación de datos del entorno (mercado, competidores…) sabremos definir las fases del plan y los recursos de la compañía que dedicar a cada una de ellas.</p>
+                                </div>
+                                <!--end form-->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-success" ng-disabled="empresa.status > 3">
+                                    Confirmar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--End Modal plan de marketing-->
+    </div>
+
+    <footer style="text-align:center">
+        2021 - Universidad Tecnológica Emiliano Zapata del Estado de Morelos
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ngstorage@0.3.11/ngStorage.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+    <script src="js/asesorRol.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Esta hecho con ajax, puedes pasarlo a angular o dejarlo asi como gustes
+        // guarda la referencia en la base, que sea el nombre y al consultar de la base
+        // consultas el nombre del archivo que guardaste y lo buscas en tu equipo
+        var input;
+
+        function cambiarFile() {
+            input = document.getElementById('fileUpload');
+            console.log("cambio");
+            if (input.files && input.files[0]) {
+                console.log("File Seleccionado : ", input.files[0]);
+            } else {
+                console.log("no entre")
+            }
+        }
+
+
+        async function uploadFile() {
+            var id = document.getElementById("cargaid").value;
+            console.log(document.getElementById("cargaid").value);
+            var formData = new FormData();
+            formData.append("file", fileUpload.files[0]);
+            formData.append("incubacion", id);
+
+            let res = await fetch('http://localhost:8080/app/upload', {
+                method: 'POST',
+                body: formData
+            });
+            if (res.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Archivo cargado',
+                    text: 'El archivo ' + input.files[0].name + ' se subió correctamente',
+                });
+
+            } else {
+                alert("Algo salió mal")
+            }
+            console.log("holaaaaa");
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
+    <script src="https://kit.fontawesome.com/938364cfa6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <title>Empresas incubadas</title>
+</head>
+
+<body ng-app="simen" ng-controller="controllerapp">
+    <header>
+        <a href="#" class="menu-bars" id="show-menu">
+            <i class="fa fa-bars"></i>
+        </a>
+        <img class="rounded-circle img-fluid" alt="Logo" src="src/logoIncubadora.png" data-holder-rendered="true" style="width:6rem; height:6rem">
+        <label class="titulo"><strong>
+                <h3>SISTEMA DE INCUBACION DE EMPRESAS</h3>
+            </strong></label>
+        <label for="" style="margin-left: 10%;">Sesión de <strong>  {{usuario}}</strong> </label>
+
+    </header>
+
+    <nav id="nav-menu">
+        <ul class="nav-menu-items">
+            <div id="navbar-toggle">
+                <a href="#" class="menu-bars" id="hide-menu">
+                    <i class="fas fa-bars nav-icon"></i>
+                </a>
+                <a href="#">
+                    <h1>
+                        <i class="fas fa-user-tie"></i> SIMEN
+                    </h1>
+                </a>
+            </div>
+            <hr>
+            <div class="nav-section">
+                <li class="nav-text"><a href="contrasenas.html"><i class="fas fa-angle-right"></i> Cambiar
+                        contraseña</a></li>
+                <li class="nav-text"><a href="AsignacionAsesores.html"><i class="fas fa-angle-right"></i> Asignación de
+                        asesores</a></li>
+                <li class="nav-text"><a href="RegistroAsesor.html"><i class="fas fa-angle-right"></i> Registro de
+                        asesor</a></li>
+                <li class="nav-text"><a href="RegistroEmpresa.html"><i class="fas fa-angle-right"></i> Registro de
+                        empresa</a></li>
+                <li class="nav-text"><a href="RegistroUsuario.html"><i class="fas fa-angle-right"></i>Registro de
+                        usuario</a></li>
+                <li class="nav-text"><a href="EmpresasIncubadasUsuario.html"><i class="fas fa-angle-right"></i>Empresas incubadas</a></li>
+
+                <li class="nav-text">
+                    <form action="" ng-click="cerrarSesion()">
+                        <button type="submit">Cerrar sesion</button>
+                    </form>
+                    </a>
+                </li>
+
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <div class="contenedorTabla row" style="margin-bottom:15%;">
+            <div class="card-header col-md-12"><strong>EMPRESAS INCUBADAS  </i> <i class="fas fa-building"></i></i></strong></div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Empresa</th>
+                        <th scope="col">Fase</th>
+                        <th scope="col">Nombre de asesor</th>
+                        <th scope="col">Opcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in empresaList2">
+                        <th scope="row">{{$index+1}}</th>
+                        <input type="hidden" ng-model="incubacion.idIncubacion" value="{{item.idIncubacion}}">
+                        <td>{{item.empresa.razonSocial}}</td>
+                        <td>{{item.status}}</td>
+                        <td>{{item.asesor.nombre}}</td>
+
+                        <td>
+                            <a type="button" ng-click="verIncubadora(item)" class="btn btn-success"><i class="fas fa-eye"></i>
+                                Financiamiento del usuario</a>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:5%;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cierre del asesor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form ng-submit="registroAsignarAsesor()">
+                            <div class="mb-3">
+                                <label for="inputEmail3" class="col-sm-12 col-form-label"><h3><strong>Empresa</strong></h3></label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span class="input-group-text" id="addon-wrapping"> <i
+                                                class="fas fa-building"></i></span>
+                                        <input type="text" name="" id="" ng-model="incubacion.empresa.razonSocial" class="form-control" readonly="true" />
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="card-header col-md-12">Sube aqui el <strong>ACTA DE CIERRE</strong></div>
+                                <p>
+                                    <input type="file" name="archivosubido">
+                                    <input type="submit" value="Hecho" style="background-color: rgb(1, 1, 82); color: white; border-radius: 10px; padding:1%;">
+                                </p>
+                                <div class="form-group row ">
+                                    <div class="col-md-12 info" style="text-align: justify;">
+                                        <label><strong>Importante:</strong></label>
+                                        <p>Al subir el acta de cierre la incubación se dará por terminada y ya no se podrá realizar ningún cambio o reinicio en la incubación.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="button " class="btn btn-secondary " data-bs-dismiss="modal ">Cerrar</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    </div>
+
+    <footer style="text-align:center ">
+        2021 - Universidad Tecnológica Emiliano Zapata del Estado de Morelos
+    </footer>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js "></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js "></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-route.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js "></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11 "></script>
+    <script src="js/asignarAsesor.js "></script>
+    <script src="js/app.js "></script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js " integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js " integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js " integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js " integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT " crossorigin="anonymous "></script>
+    <script src="js/incubacion.js "></script>
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
+    <script src="https://kit.fontawesome.com/938364cfa6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <title>Empresas incubadas</title>
+</head>
+
+<body ng-app="simen" ng-controller="controllerapp">
+    <header>
+        <a href="#" class="menu-bars" id="show-menu">
+            <i class="fa fa-bars"></i>
+        </a>
+        <img class="rounded-circle img-fluid" alt="Logo" src="src/logoIncubadora.png" data-holder-rendered="true" style="width:6rem; height:6rem">
+        <label class="titulo"><strong>
+                <h3>SISTEMA DE INCUBACION DE EMPRESAS</h3>
+            </strong>
+        </label>
+        <label for="" style="margin-left: 10%;">Sesión de
+            <strong>
+                {{usuario}}
+                <span ng-if="rol == 1">
+                    (Administrador)
+                </span>
+                <span ng-if="rol == 2">
+                    (Asesor)
+                </span>
+                <span ng-if="rol == 3">
+                    (Usuario)
+                </span>
+            </strong>
+        </label>
+    </header>
+
+    <nav id="nav-menu">
+        <ul class="nav-menu-items">
+            <div id="navbar-toggle">
+                <a href="#" class="menu-bars" id="hide-menu">
+                    <i class="fas fa-bars nav-icon"></i>
+                </a>
+                <a href="#">
+                    <h1>
+                        <i class="fas fa-user-tie"></i> SIMEN
+                    </h1>
+                </a>
+            </div>
+            <hr>
+            <div class="nav-section">
+                <li class="nav-text"><a href="contrasenas.html"><i class="fas fa-angle-right"></i> Cambiar
+                        contraseña</a></li>
+                <li class="nav-text"><a href="RegistroEmpresa.html"><i class="fas fa-angle-right"></i> Registro de
+                        empresa</a></li>
+                <li class="nav-text"><a href="EmpresasIncubadasUsuario.html"><i class="fas fa-angle-right"></i>Empresas
+                        incubadas</a></li>
+                <li class="nav-text"><a href="historialUsuario.html"><i class="fas fa-angle-right"></i> Historial</a></li>
+
+
+                <li class="">
+                    <form action="" ng-click="cerrarSesion()">
+                        <button class="btn btn-secondary" type="submit" style="margin-left: 15%; margin-top: 15%;">Cerrar sesión</button>
+                    </form>
+                    </a>
+                </li>
+
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="card-header col-md-12"><strong>HITORIAL DE EMPRESAS LIBERADAS Y/O DESHABILITADAS
+        </i></strong>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Nombre del representante</th>
+                    <th scope="col">Estado final</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in historialUsuario">
+                    <th scope="row">
+                        {{$index+1}}
+                        <input id="id" type="hidden" ng-value="{{item.idIncubacion}}">
+                    </th>
+                    <td>{{item.empresa.razonSocial}}</td>
+
+                    <td>{{item.asesor.nombre}}</td>
+                    <td>
+                        <span ng-if="item.status == 7">
+                            <label for=""> <strong>Finalizada</strong> </label>
+                        </span>
+                        <span ng-if="item.status == 0">
+                            <label for=""> <strong>Deshabilitada</strong> </label>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--End sat modal-->
+    </div>
+    </div>
+
+    <footer style="text-align:center">
+        2021 - Universidad Tecnológica Emiliano Zapata del Estado de Morelos
+    </footer>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/app.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+    <script src="js/usuarioRol.js"></script>
+</body>
+
+</html>

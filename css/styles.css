@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+header {
+    background-color: #009574;
+    color: white;
+    padding: 1%;
+    width: 90%;
+    border-bottom-right-radius: 70px 100px;
+    margin-bottom: 3%;
+}
+
+.titulo {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.subtitulo {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.rounded-circle {
+    margin-right: 5%;
+}
+
+.contenedorFormulario {
+    margin-left: 5%;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 5%;
+    padding-right: 5%;
+    width: 85%;
+    margin-right: 5%;
+    border-radius: 10px;
+}
+
+.contenedorTabla {
+    width: 100%;
+}
+
+.form-group {
+    text-align: right;
+}
+
+.contenedorFormularioInicio {
+    margin-left: 22%;
+    margin-top: 2%;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
+    width: 55%;
+    margin-right: 5%;
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 2%;
+}
+
+.card-header {
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 62%, rgba(13, 110, 130, 1) 100%);
+    margin-bottom: 3%;
+    color: white;
+}
+
+footer {
+    margin-top: 7%;
+    background-color: #009574;
+    color: white;
+    padding: 1%;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#show-menu {
+    font-size: 30px;
+    margin-right: 5%;
+}
+
+.nav-section {
+    padding-top: 15%;
+}
+
+.select {
+    border: 1px solid #ccc;
+    width: 140px;
+    overflow: hidden;
+    border-radius: 10px;
+    color: white;
+    background-color: rgba(9, 9, 121, 1);
+}
+
+.select select {
+    color: white;
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    appearance: none;
+}
+
+hr {
+    background-color: #464646;
+    height: 1px;
+    border: none;
+}
+
+#navbar {
+    background-color: #002E60;
+    height: 100px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.menu-bars {
+    margin-left: 2rem;
+    font: size 2rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+#nav-menu {
+    background-color: #002E60;
+    width: 250px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    transition: 3500ms;
+}
+
+#nav-menu.active {
+    left: 0;
+    transition: 1000ms;
+}
+
+.nav-text {
+    display: flex;
+    justify-content: start;
+    list-style: none;
+    height: 50px;
+    padding: 1rem;
+}
+
+.nav-text a {
+    text-decoration: none;
+    color: white;
+    font-size: .9rem;
+    margin-left: 1rem;
+}
+
+.nav-text:hover {
+    background-color: #03644f;
+    cursor: pointer;
+}
+
+.nav-menu-items {
+    width: 100%;
+}
+
+.nav-icon {
+    padding-right: 1rem;
+    color: white;
+}
+
+#youtube-logo {
+    color: red;
+    padding-right: 0.2rem;
+}
+
+#navbar-toggle {
+    background-color: #002E60;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+#navbar-toggle h1 {
+    color: white;
+    font-family: 'Oswald', sans-serif;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.fa-bars {
+    color: #fff;
+}
+
+.nav-section {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+textarea {
+    resize: none;
+}
+
+.checkbox {
+    /* Double-sized Checkboxes */
+    -ms-transform: scale(2);
+    /* IE */
+    -moz-transform: scale(2);
+    /* FF */
+    -webkit-transform: scale(2);
+    /* Safari and Chrome */
+    -o-transform: scale(2);
+    /* Opera */
+    transform: scale(2);
+    padding: 10px;
+}
+
+
+/* Might want to wrap a span around your checkbox text */
+
+.checkboxtext {
+    /* Checkbox text */
+    font-size: 110%;
+    display: inline;
+    margin-left: 5%;
+}

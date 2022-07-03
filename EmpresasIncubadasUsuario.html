@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
+    <script src="https://kit.fontawesome.com/938364cfa6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <title>Empresas incubadas</title>
+</head>
+
+<body ng-app="simen" ng-controller="controllerapp">
+    <header>
+        <a href="#" class="menu-bars" id="show-menu">
+            <i class="fa fa-bars"></i>
+        </a>
+        <img class="rounded-circle img-fluid" alt="Logo" src="src/logoIncubadora.png" data-holder-rendered="true" style="width:6rem; height:6rem">
+        <label class="titulo"><strong>
+                <h3>SISTEMA DE INCUBACION DE EMPRESAS</h3>
+            </strong>
+        </label>
+        <label for="" style="margin-left: 10%;">Sesión de
+            <strong>
+                {{usuario}}
+                <span ng-if="rol == 1">
+                    (Administrador)
+                </span>
+                <span ng-if="rol == 2">
+                    (Asesor)
+                </span>
+                <span ng-if="rol == 3">
+                    (Usuario)
+                </span>
+            </strong>
+        </label>
+    </header>
+
+    <nav id="nav-menu">
+        <ul class="nav-menu-items">
+            <div id="navbar-toggle">
+                <a href="#" class="menu-bars" id="hide-menu">
+                    <i class="fas fa-bars nav-icon"></i>
+                </a>
+                <a href="#">
+                    <h1>
+                        <i class="fas fa-user-tie"></i> SIMEN
+                    </h1>
+                </a>
+            </div>
+            <hr>
+            <div class="nav-section">
+                <li class="nav-text"><a href="contrasenas.html"><i class="fas fa-angle-right"></i> Cambiar
+                        contraseña</a></li>
+                <li class="nav-text"><a href="RegistroEmpresa.html"><i class="fas fa-angle-right"></i> Registro de
+                        empresa</a></li>
+                <li class="nav-text"><a href="EmpresasIncubadasUsuario.html"><i class="fas fa-angle-right"></i>Empresas
+                        incubadas</a></li>
+                <li class="nav-text"><a href="historialUsuario.html"><i class="fas fa-angle-right"></i> Historial</a>
+                </li>
+
+
+                <li class="">
+                    <form action="" ng-click="cerrarSesion()">
+                        <button class="btn btn-secondary" type="submit" style="margin-left: 15%; margin-top: 15%;">Cerrar sesión</button>
+                    </form>
+                    </a>
+                </li>
+
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <div class="contenedorTabla row" style="margin-bottom:15%;">
+            <div class="card-header col-md-12"><strong>EMPRESAS INCUBADAS </i> <i
+                        class="fas fa-building"></i></i></strong></div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Empresa</th>
+                        <th scope="col">Fase</th>
+                        <th scope="col">Nombre de asesor</th>
+                        <th scope="col">Detalles</th>
+                        <th scope="col">Reuniones</th>
+                        <th scope="col">Empresa financiera</th>
+                        <th scope="col">Registro SAT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in empresaList2">
+                        <th scope="row">{{$index+1}}</th>
+                        <input type="hidden" ng-model="incubacion.idIncubacion" value="{{item.idIncubacion}}">
+                        <td>{{item.empresa.razonSocial}}</td>
+                        <td>{{item.status}}</td>
+                        <td>{{item.asesor.nombre}}</td>
+
+                        <td>
+                            <a type="button" ng-click="verIncubadora(item)" class="btn btn-success"><i
+                                    class="fas fa-info"></i>
+                            </a>
+
+
+                        </td>
+                        <td>
+                            <a type="button" ng-click="verReuniones(item)" class="btn btn-primary"><i
+                                    class="fas fa-user-friends"></i>
+                            </a>
+                        </td>
+                        <td>
+
+                            <span ng-if="item.status == 4">
+                                <a type="button" ng-click="empresaFinanciera(item)" class="btn btn-warning"><i
+                                        class="fas fa-city"></i>
+                                </a>
+                            </span>
+                            <span ng-if="item.status == 1 || item.status == 2 || item.status == 3">
+                                <label for=""> <strong>Acción aún no disponible</strong> </label>
+                            </span>
+                            <span ng-if="item.status >= 5">
+                                <label for=""> <strong>Fase Superada</strong> </label>
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-if="item.status == 5">
+                                <a type="button" ng-click="verIncubadoraSat(item)" class="btn btn-success"><i
+                                        class="fas fa-eye"></i>
+                                    SAT</a>
+                            </span>
+                            <span ng-if="item.status < 5">
+                                <label for=""> <strong>Acción aún no disponible</strong> </label>
+                            </span>
+                            <span ng-if="item.status > 5">
+                                <label for=""> <strong>Fase Superada</strong> </label>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:5%;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">DETALLES DE LA EMPRESA</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form ng-submit="registroAsignarAsesor()">
+                            <div class="mb-3">
+                                <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                    <h3><strong>Nombre de la empresa</strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span class="input-group-text" id="addon-wrapping"> <i
+                                                class="fas fa-building"></i></span>
+                                        <input type="text" name="" id="" ng-model="incubacion.empresa.razonSocial" class="form-control" readonly="true" />
+                                    </div>
+                                </div>
+                                <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                    <h3><strong>Asesor</strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span class="input-group-text" id="addon-wrapping"> <i
+                                                class="fas fa-user-tie"></i></span>
+                                        <input type="text" name="" id="" placeholder="Sin asesor" ng-model="incubacion.asesor.nombre" class="form-control" readonly="true" />
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-12 col-form-label">
+                                    <h3><strong> Fase actual de la empresa </strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+
+                                        <div class="animate-switch-container" ng-switch on="incubacion.status" style="background-color: #050343; padding:1%; color: white;">
+                                            <div class="animate-switch" ng-switch-when="1">Empresa en registro</div>
+                                            <div class="animate-switch" ng-switch-when="2">Asignando asesor</div>
+                                            <div class="animate-switch" ng-switch-when="3">Reuniones cumpletadas</div>
+                                            <div class="animate-switch" ng-switch-when="4">Plan marketing obtenido.
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="5">Empresa financiada</div>
+                                            <div class="animate-switch" ng-switch-when="6">Registrada ante el SAT</div>
+                                            <div class="animate-switch" ng-switch-when="7">Finalizada</div>
+                                            <div class="animate-switch" ng-switch-default>Deshabilitada</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <label class="col-sm-12 col-form-label">
+                                    <h3><strong> Etapas de incubación </strong></h3>
+                                </label>
+
+                                <div class="form-group row" style="text-align:left; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+
+                                        <div class="animate-switch-container" ng-switch on="incubacion.status">
+                                            <div class="animate-switch" ng-switch-when="1">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="2">
+                                                <div>
+                                                    <label for=""> <strong>Reuniones realizadas: </strong></label>
+                                                    <label>
+                                                        <input type="checkbox" ng-checked="consulta.reunion1 > 0"
+                                                            class="radio" value="1" name="fooby[2][]" disabled />
+                                                        1</label>
+                                                    <label>
+                                                        <input type="checkbox" class="radio"
+                                                            ng-checked="consulta.reunion2 > 0" value="1"
+                                                            name="fooby[2][]" disabled /> 2</label>
+                                                    <label>
+                                                        <input type="checkbox" class="radio"
+                                                            ng-checked="consulta.reunion3 > 0" value="1"
+                                                            name="fooby[2][]" disabled /> 3</label>
+                                                    <label>
+                                                        <input type="checkbox" class="radio" value="1"
+                                                            ng-checked="consulta.reunion4 > 0" name="fooby[2][]"
+                                                            disabled /> 4</label>
+                                                </div>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="3">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="4">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="5">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i> Registrada
+                                                    ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="6">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i>
+                                                    Registrada ante el SAT </label><br>
+                                                <label><i class="fas fa-window-close" style="color:red"></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-when="7">
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    en registro </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Asignando
+                                                    asesor </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Reuniones
+                                                    cumpletadas </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Plan
+                                                    marketing obtenido </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i> Empresa
+                                                    financiada </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green"></i>
+                                                    Registrada ante el SAT </label><br>
+                                                <label><i class="fas fa-check-circle" style="color:green; "></i>
+                                                    Finalizada </label><br>
+                                            </div>
+                                            <div class="animate-switch" ng-switch-default>No hay nada que mostrar</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--Modal empresa financiera-->
+
+        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:5%;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Empresa financiera</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                <h3><strong>Empresa</strong></h3>
+                            </label>
+                            <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                <div class="input-group flex-nowrap col-md-6">
+                                    <span class="input-group-text" id="addon-wrapping"> <i
+                                            class="fas fa-building"></i></span>
+                                    <input type="text" name="" id="" ng-model="incubacion.empresa.razonSocial" class="form-control" readonly="true" />
+                                </div>
+                            </div>
+                            <nav>
+
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Crear</button>
+                                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Asignar</button>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card-header col-md-12">Ingresa los datos de la <strong>EMPRESA DE
+                                            APOYO</strong></div>
+                                    <form novalidate id="formAsesor" name="form" ng-submit="registroEmpresaFinanciera()" class="css-form">
+                                        <div class="form-group row">
+                                            <div class="col-md-12">
+                                                <input id="nombre" name="nombre" ng-model="empresaFinanciera.nombre" type="text" class="form-control" id="inputEmail3" placeholder="Razón social" required ng-pattern="/^[a-zA-ZÑñÁáÉéÍíÓóÚúÜü\s]+$/">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-12">
+                                                <input ng-model="empresaFinanciera.rfc" name="paterno" type="text" class="form-control" id="inputPassword3" placeholder=" RFC" required ng-pattern="/^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$/">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4" style="text-align:right;">
+                                                <label> Giro de empresa</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select name="giro" id="giro" ng-model="empresaFinanciera.giro.idGiro" class="form-control form-control-sm" required>
+                                                    <option ng-repeat="item in giro" value={{item.idGiro}}>
+                                                        {{item.nombre}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <div class="col-md-4 ">
+                                            </div>
+                                            <div class="col-md-4 ">
+                                            </div>
+                                            <div class="col-md-4 ">
+                                                <button type="submit " class="btn btn-primary " style=" margin-top: 3%; " ng-disabled="form.$invalid"><i
+                                                        class="fas fa-clipboard-check "></i> HECHO</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                    <form name="form2" id="form2" ng-submit="asignarEmpresaFinanciera()">
+                                        <div class="row" style="margin-top: 2%;">
+                                            <div class="col-md-3"><label>Empresa</label></div>
+                                            <div class="col-md-9">
+                                                <select name="giro" id="financiera" ng-model="empresasFinancieras.idEmpresaFinanciera" class="form-control form-control-sm" required>
+                                                    <option ng-repeat="item in empresaFinancieras"
+                                                        value={{item.idEmpresaFinanciera}}>
+                                                        {{item.nombre}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3" style="margin-top: 2%;"><label>Tipo apoyo</label>
+                                            </div>
+                                            <div class="col-md-9" style="margin-top: 2%;">
+                                                <select name="giro" ng-model="empresasFinancieras.tipoFinanciamiento" id="tipoApoyo" ng-model="empresa.tipoApoyo" class="form-control form-control-sm" required>
+                                                    <option value="1">Económico</option>
+                                                    <option value="2">Material</option>
+
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-12 " style="margin-top:3%;">
+                                                <textarea name="textarea " ng-model="empresasFinancieras.comentario" rows="3 " placeholder="Comentarios " style="width:100% " required></textarea>
+                                                <h1>{{form2.textarea.$valid}}</h1>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <button type="submit" ng-disabled="form2.$invalid" class="btn btn-primary" style="width:20%">Crear</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End modal -->
+
+        <!--Sat modal-->
+        <div class="modal fade" id="ModalSat" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:5%;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Registro oficial del usuario</h5>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <form name="formSat" ng-submit="registroOficialUsuario()">
+                            <div class="mb-3">
+                                <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                    <h3><strong>Empresa</strong></h3>
+                                </label>
+                                <div class="form-group row" style="text-align:right; margin-bottom:5%;">
+                                    <div class="input-group flex-nowrap col-md-6">
+                                        <span class="input-group-text" id="addon-wrapping"> <i
+                                                class="fas fa-building"></i></span>
+                                        <input type="text" name="" id="" ng-model="incubacion.empresa.razonSocial" class="form-control" readonly="true" />
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="card-header col-md-12">Ingresa los datos <strong>OFICIALES</strong></div>
+                                <form novalidate id="formAsesor" name="form" ng-submit="registroUsuario()" class="css-form" style="padding-left: 25%;">
+                                    <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                        <h4><strong>Datos del representante</strong></h4>
+                                    </label>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input type="hidden" ng-model="incubacion.idIncubacion" ng-value="incubacion.idIncubacion">
+                                            <input id="nombre" name="nombre" ng-model="usuarioSat.nombreRepresentante" type="text" class="form-control" id="inputEmail3" placeholder=" Nombre(s)" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input ng-model="usuarioSat.paternoRepresentante" name="paterno" type="text" class="form-control" id="inputPassword3" placeholder=" Primer apellido" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input ng-model="usuarioSat.maternoRepresentante" name="paterno" type="text" class="form-control" id="inputPassword3" placeholder=" Segundo apellido" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input ng-model="usuarioSat.correoRepresentante" name="paterno" type="text" class="form-control" id="inputPassword3" placeholder=" Correo " required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input ng-model="usuarioSat.curpRepresentante" name="paterno" type="text" class="form-control" id="inputPassword3" placeholder=" CURP " required>
+                                        </div>
+                                    </div>
+                                    <label for="inputEmail3" class="col-sm-12 col-form-label">
+                                        <h4><strong>Datos de la Empresa</strong></h4>
+                                    </label>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input ng-model="usuarioSat.razonSocial" name="paterno" type="text" class="form-control" id="inputPassword3" placeholder=" Razón social " required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <input ng-model="usuarioSat.rfc" name="paterno" type="text" class="form-control" id="inputPassword3" placeholder=" RFC " required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputEmail3" class="col-sm-5 col-form-label">GIRO </label>
+                                        <div class="col-md-6">
+                                            <select name="giro" id="giro" ng-model="usuarioSat.giro.idGiro" class="form-control form-control-sm" required>
+                                                <option ng-repeat="item in giro" value={{item.idGiro}}>{{item.nombre}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row ">
+                                        <div class="col-md-4 ">
+                                        </div>
+                                        <div class="col-md-4 ">
+                                        </div>
+                                        <div class="col-md-4 ">
+                                            <button type="submit " class="btn btn-primary " style=" margin-top: 3%; " ng-disabled="formSat.$invalid "><i class="fas fa-clipboard-check "></i>
+                                                HECHO</button>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+        <!--End sat modal-->
+    </div>
+    </div>
+
+    <footer style="text-align:center">
+        2021 - Universidad Tecnológica Emiliano Zapata del Estado de Morelos
+    </footer>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/app.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+    <script src="js/usuarioRol.js"></script>
+</body>
+
+</html>

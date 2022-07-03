@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <input id="fileUpload" type="file" name="fileUpload">
+        <button onclick="uploadFile()">SUBIR</button>
+    </div>
+
+    <script>
+        // Esta hecho con ajax, puedes pasarlo a angular o dejarlo asi como gustes
+        // guarda la referencia en la base, que sea el nombre y al consultar de la base
+        // consultas el nombre del archivo que guardaste y lo buscas en tu equipo
+        async function uploadFile() {
+            var formData = new FormData();
+            formData.append("file", fileUpload.files[0]);
+            let res = await fetch('http://localhost:8080/app/upload', {
+                method: 'POST',
+                body: formData
+            });
+            if (res.status === 200) {
+                alert("Envia una alerta de que se agrego correctamente :v")
+            } else {
+                alert("algo fallo xd")
+            }
+        }
+    </script>
+</body>
+
+</html>
